@@ -1,0 +1,9 @@
+# Compiled Python cached files
+__pycache__/
+**.pyc
+
+# Virtualenv files
+venv
+
+# Files
+route.txt
