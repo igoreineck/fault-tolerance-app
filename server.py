@@ -1,25 +1,23 @@
 from multicast import MultiCast
-import Pyro4
+# from rmihandler i
+from uuid import uuid4
+import Pyro4 as pyro
 
 
 if __name__ == "__main__":
 
-    exposed_class = Pyro4.expose(MultiCast)
-    route = "myroute"
-    FILENAME = "route.txt"
+    HOST = 'localhost'
+    PORT = 9090
 
-    with open(FILENAME, "w") as file:
-        file.write(route)
+    route = "custom-route-{}".format(uuid4())
 
-    with Pyro4.Daemon() as daemon:
-        daemon.serveSimple(
-            {
-                exposed_class: route
-            },
-            ns=False,
-            host="0.0.0.0",
-            port=9090
-        )
-
-        ns = Pyro4.locateNS(host='localhost', port=9090)
-        print(ns)
+    with pyro.Daemon() as daemon:
+        # ns = RmiHandler().get_named_servers()
+        ns = pyro.locateNS(host='localhost', port=9090)
+        # server = MultiCast()
+        uri = daemon.register(MultiCast)
+        ns.register(route, uri)
+        print("Server running...")
+        daemon.requestLoop()
+        # while True:
+        #     mensagens = server.get_messages()
