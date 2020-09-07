@@ -1,30 +1,24 @@
 from multicast import MultiCast
-from uuid import uuid4
 from constants.routes_config import RoutesConfig
-
+from helpers.utils import (
+    get_last_replica,
+    generate_route,
+    get_replica,
+)
 import Pyro4 as pyro
-
-
-def _get_last_replica(key_list):
-    return list(key_list.keys())[-1]
-
-
-def get_replica():
-    ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)
-    servers = ns.list('custom-route-')
-    if servers:
-        server_name = _get_last_replica(servers)
-        return pyro.Proxy(servers[server_name])
+from Pyro4.errors import CommunicationError
 
 
 if __name__ == "__main__":
-    route = "custom-route-{}".format(uuid4())
-
-    server_copy = get_replica()
+    route = generate_route()
     server = MultiCast()
 
-    if server_copy:
-        server.overwrite_messages(server_copy.get_messages)
+    try:
+        server_copy = get_replica()
+        if server_copy:
+            server.overwrite_messages(server_copy.get_messages)
+    except CommunicationError:
+        pass
 
     with pyro.Daemon() as daemon:
         ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)

@@ -1,57 +1,40 @@
-from constants.routes_config import RoutesConfig
-
-import Pyro4 as pyro
-
-
-def _get_last_replica(key_list):
-    return list(key_list.keys())[-1]
-
-
-def check_replica():
-    ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)
-    servers = ns.list('custom-route-')
-    server_name = _get_last_replica(servers)
-    return pyro.Proxy(servers[server_name])
+from constants.input_options import InputOptions
+from client_handler import ClientHandler
+import os
 
 
 if __name__ == "__main__":
 
-    OPTION_ECHO = 1
-    OPTION_LIST = 2
-    OPTION_EXIT = 0
-
     option = -1
+    client = ClientHandler()
 
-    conn = check_replica()
-
-    while option != OPTION_EXIT:
+    while option != InputOptions.OPTION_EXIT:
         print('\n#############\n')
         print('Opções...')
-        print('{}) Enviar mensagem '.format(OPTION_ECHO))
-        print('{}) Listar mensagens '.format(OPTION_LIST))
-        print('{}) Sair '.format(OPTION_EXIT))
+        print('{}) Enviar mensagem '.format(InputOptions.OPTION_ECHO))
+        print('{}) Listar mensagens '.format(InputOptions.OPTION_LIST))
+        print('{}) Sair '.format(InputOptions.OPTION_EXIT))
         print('\n')
 
-        option = int(input('Escolha uma opção: '))
+        try:
+            option = int(input('Escolha uma opção: '))
 
-        if option == OPTION_ECHO:
-            print('enviando mensagem')
-            message = input('Escreva sua mensagem: ')
-            try:
-                conn.echo(message)
-            except pyro.errors.ConnectionClosedError:
-                conn = check_replica()
-                conn.echo(message)
+            if option == InputOptions.OPTION_ECHO:
+                os.system('clear')
+                message = input('Escreva sua mensagem: ')
+                client.echo(message)
 
-        elif option == OPTION_LIST:
-            print('listando mensagens')
-            try:
-                messages = conn.get_messages
-            except pyro.errors.ConnectionClosedError:
-                conn = check_replica()
-                messages = conn.get_messages
-            finally:
-                print(messages)
+            elif option == InputOptions.OPTION_LIST:
+                os.system('clear')
+                messages = client.get_messages()
+                print('Listando Mensagens: {}'.format(messages))
 
-        elif option == OPTION_EXIT:
-            print('saindo')
+            elif option == InputOptions.OPTION_EXIT:
+                os.system('clear')
+                print('Saindo')
+
+            else:
+                print('Selecione uma opção válida')
+
+        except ValueError:
+            print('Selecione uma opção válida')

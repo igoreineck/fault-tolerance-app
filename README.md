@@ -54,24 +54,24 @@ deactivate
 
 ### To do
 
-- [ ] Allow call echo method on echo server, it takes as arg the message to be returned as a echo
-- [ ] Get already echoed messages list, this operation allow call getListOfMsg at echo servers to get the list of messages already sent by the clients
-- [ ] Reply the operations to other replica servers, the server can call a replica to other replica servers
-- [ ] Client can call the echo method on master server and this server can foward this call with the message to replica servers
-- [ ] Ask the replica server quantity on server start
+- [x] Allow call echo method on echo server, it takes as arg the message to be returned as a echo
+- [x] Get already echoed messages list, this operation allow call getListOfMsg at echo servers to get the list of messages already sent by the clients
+- [x] Reply the operations to other replica servers, the server can call a replica to other replica servers
+- [x] Client can call the echo method on master server and this server can foward this call with the message to replica servers
+- [ ] Tell the replica server quantity on server start
 
 ### Requirements
 
-- [ ] Allow N replica servers
-- [ ] Every server (master and replicas) should mantain all received message that can be called by the client with getListOfMsg method
-- [ ] If master server is down, the calling of echo method and getListOfMsg should be done to the next replica server and not be perceived by the user
-- [ ] Instantiate the server before the client
-- [ ] Ensure the server code is unique
+- [x] Allow N replica servers
+- [x] Every server (master and replicas) should mantain all received message that can be called by the client with getListOfMsg method
+- [x] If master server is down, the calling of echo method and getListOfMsg should be done to the next replica server and not be perceived by the user
+- [x] Instantiate the server before the client
+- [x] Ensure the server code is unique
 
 ### Optional
 
 - [ ] The replica servers quantity should be equal the quantity the code is executed by the command line or steps below
-- [ ] Use a list of remote object name that represent the replica server
-- [ ] Allow users to kill the first server of list
+- [x] Use a list of remote object name that represent the replica server
+- [x] Allow users to kill the first server of list
 - [ ] The first name of list could be the master server
-- [ ] When a new server is instantiated with a especific name of object, it should be added to the end of list
+- [x] When a new server is instantiated with a especific name of object, it should be added to the end of list
