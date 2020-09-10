@@ -32,7 +32,13 @@ pip install -r requirements.txt
 
 ### Running
 
-If everything worked fine, you should be able to run the server without troubles:
+First let the pyro name server running to start the server:
+
+```python
+python -m Pyro4.naming
+```
+
+Open another terminal, than activate your environment to start the master server:
 
 ```python
 python server.py
@@ -43,6 +49,14 @@ The same could be do with the client:
 ```python
 python client.py
 ```
+
+Choose the desired option from the client menu:
+
+- 1 - to echo a message
+- 2 - list all messages
+- 0 - exit the app
+
+Then you can open as many server terminals you want, and close them just by pressing CTRL + C at the terminal and the data will still be consistent using the running servers
 
 ### Deactivating environment
 
