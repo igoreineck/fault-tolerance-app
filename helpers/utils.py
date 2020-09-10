@@ -14,5 +14,6 @@ def generate_route():
 def get_replica():
     ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)
     servers = ns.list('custom-route-')
-    server_name = get_last_replica(servers)
-    return pyro.Proxy(servers[server_name])
+    if servers:
+        server_name = get_last_replica(servers)
+        return pyro.Proxy(servers[server_name])
