@@ -1,37 +1,37 @@
-from constants.input_options import InputOptions
-from client_handler import ClientHandler
 import os
+
+from client_handler import ClientHandler
+from constants.input_options import InputOptions
 
 
 if __name__ == "__main__":
-
-    option = -1
     client = ClientHandler()
+    option = -1
 
-    while option != InputOptions.OPTION_EXIT:
-        print('\n#############\n')
-        print('Opções...')
-        print('{}) Enviar mensagem '.format(InputOptions.OPTION_ECHO))
-        print('{}) Listar mensagens '.format(InputOptions.OPTION_LIST))
-        print('{}) Sair '.format(InputOptions.OPTION_EXIT))
-        print('\n')
+    while option != InputOptions.EXIT:
+        print("---------------------------")
+        print("Opções\n")
+        print("{}) Enviar mensagem".format(InputOptions.ECHO))
+        print("{}) Listar mensagens".format(InputOptions.LIST))
+        print("{}) Sair".format(InputOptions.EXIT))
+        print("---------------------------")
 
         try:
             option = int(input('Escolha uma opção: '))
 
-            if option == InputOptions.OPTION_ECHO:
+            if option == InputOptions.ECHO:
                 os.system('clear')
                 message = input('Escreva sua mensagem: ')
                 client.echo(message)
 
-            elif option == InputOptions.OPTION_LIST:
+            elif option == InputOptions.LIST:
                 os.system('clear')
                 messages = client.get_messages()
                 print('Listando Mensagens: {}'.format(messages))
 
-            elif option == InputOptions.OPTION_EXIT:
+            elif option == InputOptions.EXIT:
                 os.system('clear')
-                print('Saindo')
+                print('Finalizando...')
 
             else:
                 print('Selecione uma opção válida')
