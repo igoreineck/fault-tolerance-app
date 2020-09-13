@@ -4,14 +4,13 @@ import Pyro4 as pyro
 from Pyro4.errors import CommunicationError, ConnectionClosedError
 
 from constants.routes_config import RoutesConfig
-from helpers.utils import get_last_replica, get_replica
+from helpers.utils import get_last_replica, get_replica, get_servers
 
 
 class ClientHandler:
 
     def echo(self, message):
-        ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)
-        servers = ns.list('custom-route-')
+        servers = get_servers()
         if servers:
             for server in list(servers.keys()):
                 conn = pyro.Proxy(servers[server])
