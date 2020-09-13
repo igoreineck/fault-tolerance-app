@@ -1,20 +1,22 @@
-from constants.routes_config import RoutesConfig
-from Pyro4.errors import (
-    ConnectionClosedError,
-    CommunicationError
-)
-from helpers.utils import get_last_replica, get_replica
-import Pyro4 as pyro
 import sys
+
+import Pyro4 as pyro
+from Pyro4.errors import CommunicationError, ConnectionClosedError
+
+from constants.routes_config import RoutesConfig
+from helpers.utils import get_last_replica, get_replica
 
 
 class ClientHandler:
 
     def echo(self, message):
-        try:
-            conn = get_replica()
-            conn.echo(message)
-        except CommunicationError:
+        ns = pyro.locateNS(host=RoutesConfig.HOST, port=RoutesConfig.PORT)
+        servers = ns.list('custom-route-')
+        if servers:
+            for server in list(servers.keys()):
+                conn = pyro.Proxy(servers[server])
+                conn.echo(message)
+        else:
             print('Não há nenhum servidor ativo')
             sys.exit(0)
 
@@ -22,6 +24,6 @@ class ClientHandler:
         try:
             conn = get_replica()
             return conn.get_messages
-        except CommunicationError:
+        except:
             print('Não há nenhum servidor ativo')
             sys.exit(0)
